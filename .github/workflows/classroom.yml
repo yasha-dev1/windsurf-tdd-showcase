@@ -1,0 +1,993 @@
+name: DST Autograding Workflow
+
+'on':
+  push:
+    branches:
+      - main
+
+permissions:
+  checks: write
+  contents: read
+  actions: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  run-autograding-tests:
+    runs-on:
+      group: org/dst-auto-grading-group
+    if: github.actor != 'github-classroom[bot]'
+
+    steps:
+      - name: Ensure that Grading Workflow re-runs are cancelled
+        run: |
+          if [ "$GITHUB_RUN_ATTEMPT" -gt 1 ]; then
+              echo "Re-run detected. Re-runs are not permitted because the results of Grading Workflow re-runs are not transmitted to GitHub Classroom."
+              echo ""
+              echo "Exiting ..."
+              exit 1
+          else
+              echo "This is the first run of the Grading Workflow for commit $GITHUB_SHA"
+              echo ""
+              echo "Proceeding with the Grading Workflow ..."
+          fi
+
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Compile Root Project and install JPA
+        run: mvn compile -Pall -DskipTests=true && mvn install -Pass1-jpa -DskipTests
+
+      - name: Test test01_modelFactoryReturnsThings
+        id: test01_modelFactoryReturnsThings
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: test01_modelFactoryReturnsThings
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_00Test#test01_modelFactoryReturnsThings
+          timeout: 1
+          max-score: 1
+
+      - name: Test test02_daoFactoryReturnsThings
+        id: test02_daoFactoryReturnsThings
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: test02_daoFactoryReturnsThings
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_00Test#test02_daoFactoryReturnsThings
+          timeout: 1
+          max-score: 1
+
+      - name: Test test03_entityTypesManagedCorrectly
+        id: test03_entityTypesManagedCorrectly
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: test03_entityTypesManagedCorrectly
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_00Test#test03_entityTypesManagedCorrectly
+          timeout: 1
+          max-score: 1
+
+      - name: Test test04_canInsertTestFixture
+        id: test04_canInsertTestFixture
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: test04_canInsertTestFixture
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_00Test#test04_canInsertTestFixture
+          timeout: 1
+          max-score: 1
+
+      - name: Test testBasicTablesJdbc
+        id: testBasicTablesJdbc
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testBasicTablesJdbc
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_01Test#testBasicTablesJdbc
+          timeout: 1
+          max-score: 1
+
+      - name: Test testRelation01Jdbc
+        id: testRelation01Jdbc
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testRelation01Jdbc
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_01Test#testRelation01Jdbc
+          timeout: 1
+          max-score: 2
+
+      - name: Test testRelation02Jdbc
+        id: testRelation02Jdbc
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testRelation02Jdbc
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_01Test#testRelation02Jdbc
+          timeout: 1
+          max-score: 1
+
+      - name: Test testRelation03Jdbc
+        id: testRelation03Jdbc
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testRelation03Jdbc
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_01Test#testRelation03Jdbc
+          timeout: 1
+          max-score: 2
+
+      - name: Test testRelation04Jdbc
+        id: testRelation04Jdbc
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testRelation04Jdbc
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_01Test#testRelation04Jdbc
+          timeout: 1
+          max-score: 3
+
+      - name: Test testRelation05Jdbc
+        id: testRelation05Jdbc
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testRelation05Jdbc
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_01Test#testRelation05Jdbc
+          timeout: 1
+          max-score: 2
+
+      - name: Test testRelation06Jdbc
+        id: testRelation06Jdbc
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testRelation06Jdbc
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_01Test#testRelation06Jdbc
+          timeout: 1
+          max-score: 3
+
+      - name: Test testRelation07Jdbc
+        id: testRelation07Jdbc
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testRelation07Jdbc
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_01Test#testRelation07Jdbc
+          timeout: 1
+          max-score: 3
+
+      - name: Test testRelation08Jdbc
+        id: testRelation08Jdbc
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testRelation08Jdbc
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_01Test#testRelation08Jdbc
+          timeout: 1
+          max-score: 3
+
+      - name: Test testRelation09Jdbc
+        id: testRelation09Jdbc
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testRelation09Jdbc
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_01Test#testRelation09Jdbc
+          timeout: 1
+          max-score: 2
+
+      - name: Test testRelation10Jdbc
+        id: testRelation10Jdbc
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testRelation10Jdbc
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_01Test#testRelation10Jdbc
+          timeout: 1
+          max-score: 2
+
+      - name: Test testRelation11Jdbc
+        id: testRelation11Jdbc
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testRelation11Jdbc
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_01Test#testRelation11Jdbc
+          timeout: 1
+          max-score: 2
+
+      - name: Test testRelation12Jdbc
+        id: testRelation12Jdbc
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testRelation12Jdbc
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_01Test#testRelation12Jdbc
+          timeout: 1
+          max-score: 2
+
+      - name: Test testRelation13Jdbc
+        id: testRelation13Jdbc
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testRelation13Jdbc
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_01Test#testRelation13Jdbc
+          timeout: 1
+          max-score: 1
+
+      - name: Test testColumnType01Jdbc
+        id: testColumnType01Jdbc
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testColumnType01Jdbc
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_01Test#testColumnType01Jdbc
+          timeout: 1
+          max-score: 2
+
+      - name: Test testConstraintVehicleLicenseUnique
+        id: testConstraintVehicleLicenseUnique
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testConstraintVehicleLicenseUnique
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_02Test#testConstraintVehicleLicenseUnique
+          timeout: 1
+          max-score: 1
+
+      - name: Test testConstraintJdbcVehicleLicenseUnique
+        id: testConstraintJdbcVehicleLicenseUnique
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testConstraintJdbcVehicleLicenseUnique
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_02Test#testConstraintJdbcVehicleLicenseUnique
+          timeout: 1
+          max-score: 1
+
+      - name: Test testConstraintRiderMailNotNull
+        id: testConstraintRiderMailNotNull
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testConstraintRiderMailNotNull
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_03Test#testConstraintRiderMailNotNull
+          timeout: 1
+          max-score: 1
+
+      - name: Test testConstraintJdbcRiderTelNotNull
+        id: testConstraintJdbcRiderTelNotNull
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testConstraintJdbcRiderTelNotNull
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_03Test#testConstraintJdbcRiderTelNotNull
+          timeout: 1
+          max-score: 1
+
+      - name: Test testConstraintDriverTelNotNull
+        id: testConstraintDriverTelNotNull
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testConstraintDriverTelNotNull
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_04Test#testConstraintDriverTelNotNull
+          timeout: 1
+          max-score: 1
+
+      - name: Test testConstraintJdbcDriverTelNotNull
+        id: testConstraintJdbcDriverTelNotNull
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testConstraintJdbcDriverTelNotNull
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_04Test#testConstraintJdbcDriverTelNotNull
+          timeout: 1
+          max-score: 1
+
+      - name: Test moneyEntityCannotBePersisted
+        id: moneyEntityCannotBePersisted
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: moneyEntityCannotBePersisted
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_05Test#moneyEntityCannotBePersisted
+          timeout: 1
+          max-score: 1
+
+      - name: Test moneyIsEmbeddableType
+        id: moneyIsEmbeddableType
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: moneyIsEmbeddableType
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_05Test#moneyIsEmbeddableType
+          timeout: 1
+          max-score: 1
+
+      - name: Test moneyHasNoTable
+        id: moneyHasNoTable
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: moneyHasNoTable
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_05Test#moneyHasNoTable
+          timeout: 1
+          max-score: 1
+
+      - name: Test testTripRiderAssociation
+        id: testTripRiderAssociation
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testTripRiderAssociation
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_08Test#testTripRiderAssociation
+          timeout: 1
+          max-score: 2
+
+      - name: Test testTripStatus
+        id: testTripStatus
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testTripStatus
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_08Test#testTripStatus
+          timeout: 1
+          max-score: 2
+
+      - name: Test testOrganizationVehicleAssociation
+        id: testOrganizationVehicleAssociation
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testOrganizationVehicleAssociation
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_09Test#testOrganizationVehicleAssociation
+          timeout: 1
+          max-score: 3
+
+      - name: Test testOrganizationSelfAssociation
+        id: testOrganizationSelfAssociation
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testOrganizationSelfAssociation
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_10Test#testOrganizationSelfAssociation
+          timeout: 1
+          max-score: 2
+
+      - name: Test testOrganizationSelfAssociationJdbc
+        id: testOrganizationSelfAssociationJdbc
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testOrganizationSelfAssociationJdbc
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_1_10Test#testOrganizationSelfAssociationJdbc
+          timeout: 1
+          max-score: 2
+
+      - name: Test testRiderAccountNoBankCodeConstraint
+        id: testRiderAccountNoBankCodeConstraint
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testRiderAccountNoBankCodeConstraint
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_2_01Test#testRiderAccountNoBankCodeConstraint
+          timeout: 1
+          max-score: 1
+
+      - name: Test testRiderAccountNoBankCodeConstraintJdbc
+        id: testRiderAccountNoBankCodeConstraintJdbc
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testRiderAccountNoBankCodeConstraintJdbc
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_2_01Test#testRiderAccountNoBankCodeConstraintJdbc
+          timeout: 1
+          max-score: 1
+
+      - name: Test testUniqueConstraint
+        id: testUniqueConstraint
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testUniqueConstraint
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_2_02Test#testUniqueConstraint
+          timeout: 1
+          max-score: 3
+
+      - name: Test testNotNullConstraint
+        id: testNotNullConstraint
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testNotNullConstraint
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_2_02Test#testNotNullConstraint
+          timeout: 1
+          max-score: 3
+
+      - name: Test testRiderEmailNotNullConstraintJdbc
+        id: testRiderEmailNotNullConstraintJdbc
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testRiderEmailNotNullConstraintJdbc
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_1_2_02Test#testRiderEmailNotNullConstraintJdbc
+          timeout: 1
+          max-score: 2
+
+      - name: Test testFindActiveHighlyRatedDrivers_ValidRating
+        id: testFindActiveHighlyRatedDrivers_ValidRating
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testFindActiveHighlyRatedDrivers_ValidRating
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_2_1aTest#testFindActiveHighlyRatedDrivers_ValidRating
+          timeout: 1
+          max-score: 10
+
+      - name: Test testFindActiveHighlyRatedDrivers_InvalidRating
+        id: testFindActiveHighlyRatedDrivers_InvalidRating
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testFindActiveHighlyRatedDrivers_InvalidRating
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_2_1aTest#testFindActiveHighlyRatedDrivers_InvalidRating
+          timeout: 1
+          max-score: 10
+
+      - name: Test testFindActiveHighlyRatedDrivers_NoResults
+        id: testFindActiveHighlyRatedDrivers_NoResults
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testFindActiveHighlyRatedDrivers_NoResults
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_2_1aTest#testFindActiveHighlyRatedDrivers_NoResults
+          timeout: 1
+          max-score: 5
+
+      - name: Test testFindCompletedTripsWithMinStops_Success
+        id: testFindCompletedTripsWithMinStops_Success
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testFindCompletedTripsWithMinStops_Success
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_2_1bTest#testFindCompletedTripsWithMinStops_Success
+          timeout: 1
+          max-score: 10
+
+      - name: Test testFindCompletedTripsWithMinStops_NoResults
+        id: testFindCompletedTripsWithMinStops_NoResults
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testFindCompletedTripsWithMinStops_NoResults
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_2_1bTest#testFindCompletedTripsWithMinStops_NoResults
+          timeout: 1
+          max-score: 10
+
+      - name: Test testFindCompletedTripsWithMinStops_InvalidInput
+        id: testFindCompletedTripsWithMinStops_InvalidInput
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testFindCompletedTripsWithMinStops_InvalidInput
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_2_1bTest#testFindCompletedTripsWithMinStops_InvalidInput
+          timeout: 1
+          max-score: 5
+
+      - name: Test testFindOrganizationsByVehicleTypeAndDriverRating_Success
+        id: testFindOrganizationsByVehicleTypeAndDriverRating_Success
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testFindOrganizationsByVehicleTypeAndDriverRating_Success
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_2_1cTest#testFindOrganizationsByVehicleTypeAndDriverRating_Success
+          timeout: 1
+          max-score: 10
+
+      - name: Test testFindOrganizationsByVehicleTypeAndDriverRating_NoResults
+        id: testFindOrganizationsByVehicleTypeAndDriverRating_NoResults
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testFindOrganizationsByVehicleTypeAndDriverRating_NoResults
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_2_1cTest#testFindOrganizationsByVehicleTypeAndDriverRating_NoResults
+          timeout: 1
+          max-score: 10
+
+      - name: Test testFindOrganizationsByVehicleTypeAndDriverRating_InvalidRating
+        id: testFindOrganizationsByVehicleTypeAndDriverRating_InvalidRating
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testFindOrganizationsByVehicleTypeAndDriverRating_InvalidRating
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_2_1cTest#testFindOrganizationsByVehicleTypeAndDriverRating_InvalidRating
+          timeout: 1
+          max-score: 5
+
+      - name: Test testFindTopPerformingDrivers_Success
+        id: testFindTopPerformingDrivers_Success
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testFindTopPerformingDrivers_Success
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_2_2Test#testFindTopPerformingDrivers_Success
+          timeout: 1
+          max-score: 10
+
+      - name: Test testFindTopPerformingDrivers_NoResults
+        id: testFindTopPerformingDrivers_NoResults
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testFindTopPerformingDrivers_NoResults
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_2_2Test#testFindTopPerformingDrivers_NoResults
+          timeout: 1
+          max-score: 10
+
+      - name: Test testFindTopPerformingDrivers_InvalidDateRange
+        id: testFindTopPerformingDrivers_InvalidDateRange
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testFindTopPerformingDrivers_InvalidDateRange
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_2_2Test#testFindTopPerformingDrivers_InvalidDateRange
+          timeout: 1
+          max-score: 5
+
+      - name: Test testFindTripsWithCriteria_AllParameters
+        id: testFindTripsWithCriteria_AllParameters
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testFindTripsWithCriteria_AllParameters
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_2_3Test#testFindTripsWithCriteria_AllParameters
+          timeout: 1
+          max-score: 5
+
+      - name: Test testFindTripsWithCriteria_OnlyFareRange
+        id: testFindTripsWithCriteria_OnlyFareRange
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testFindTripsWithCriteria_OnlyFareRange
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_2_3Test#testFindTripsWithCriteria_OnlyFareRange
+          timeout: 1
+          max-score: 5
+
+      - name: Test testFindTripsWithCriteria_OnlyMinStops
+        id: testFindTripsWithCriteria_OnlyMinStops
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testFindTripsWithCriteria_OnlyMinStops
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_2_3Test#testFindTripsWithCriteria_OnlyMinStops
+          timeout: 1
+          max-score: 5
+
+      - name: Test testFindTripsWithCriteria_NoResults
+        id: testFindTripsWithCriteria_NoResults
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testFindTripsWithCriteria_NoResults
+          setup-command: ''
+          command: mvn test -Pass1-jpa -Dtest=dst.ass1.jpa.tests.Ass1_2_3Test#testFindTripsWithCriteria_NoResults
+          timeout: 1
+          max-score: 5
+
+      - name: Test checkIndexApplied
+        id: checkIndexApplied
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: checkIndexApplied
+          setup-command: ''
+          command: mvn test -Pass1-doc -Dtest=dst.ass1.doc.tests.Ass1_4_1GradingTest#checkIndexApplied
+          timeout: 1
+          max-score: 5
+
+      - name: Test checkGeoIndexApplied
+        id: checkGeoIndexApplied
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: checkGeoIndexApplied
+          setup-command: ''
+          command: mvn test -Pass1-doc -Dtest=dst.ass1.doc.tests.Ass1_4_1GradingTest#checkGeoIndexApplied
+          timeout: 1
+          max-score: 5
+
+      - name: Test insert_insertsDocumentsCorrectly
+        id: insert_insertsDocumentsCorrectly
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: insert_insertsDocumentsCorrectly
+          setup-command: ''
+          command: mvn test -Pass1-doc -Dtest=dst.ass1.doc.tests.Ass1_4_1Test#insert_insertsDocumentsCorrectly
+          timeout: 1
+          max-score: 20
+
+      - name: Test findByLocationType_returnsCorrectDocumentsForTypePlace
+        id: findByLocationType_returnsCorrectDocumentsForTypePlace
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: findByLocationType_returnsCorrectDocumentsForTypePlace
+          setup-command: ''
+          command: mvn test -Pass1-doc -Dtest=dst.ass1.doc.tests.Ass1_4_2aTest#findByLocationType_returnsCorrectDocumentsForTypePlace
+          timeout: 1
+          max-score: 5
+
+      - name: Test findByLocationType_returnsCorrectDocumentsForTypeFood
+        id: findByLocationType_returnsCorrectDocumentsForTypeFood
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: findByLocationType_returnsCorrectDocumentsForTypeFood
+          setup-command: ''
+          command: mvn test -Pass1-doc -Dtest=dst.ass1.doc.tests.Ass1_4_2aTest#findByLocationType_returnsCorrectDocumentsForTypeFood
+          timeout: 1
+          max-score: 5
+
+      - name: Test testFindOpenRestaurantsInRadius_Success
+        id: testFindOpenRestaurantsInRadius_Success
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testFindOpenRestaurantsInRadius_Success
+          setup-command: ''
+          command: mvn test -Pass1-doc -Dtest=dst.ass1.doc.tests.Ass1_4_2bTest#testFindOpenRestaurantsInRadius_Success
+          timeout: 1
+          max-score: 10
+
+      - name: Test testFindOpenRestaurantsInRadius_ClosedHour
+        id: testFindOpenRestaurantsInRadius_ClosedHour
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testFindOpenRestaurantsInRadius_ClosedHour
+          setup-command: ''
+          command: mvn test -Pass1-doc -Dtest=dst.ass1.doc.tests.Ass1_4_2bTest#testFindOpenRestaurantsInRadius_ClosedHour
+          timeout: 1
+          max-score: 10
+
+      - name: Test testFindOpenRestaurantsInRadius_InvalidHour
+        id: testFindOpenRestaurantsInRadius_InvalidHour
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testFindOpenRestaurantsInRadius_InvalidHour
+          setup-command: ''
+          command: mvn test -Pass1-doc -Dtest=dst.ass1.doc.tests.Ass1_4_2bTest#testFindOpenRestaurantsInRadius_InvalidHour
+          timeout: 1
+          max-score: 5
+
+      - name: Test testCalculateLocationDensity_TUWienArea
+        id: testCalculateLocationDensity_TUWienArea
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testCalculateLocationDensity_TUWienArea
+          setup-command: ''
+          command: mvn test -Pass1-doc -Dtest=dst.ass1.doc.tests.Ass1_4_3_01Test#testCalculateLocationDensity_TUWienArea
+          timeout: 1
+          max-score: 20
+
+      - name: Test testCalculateLocationDensity_UniversityArea
+        id: testCalculateLocationDensity_UniversityArea
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testCalculateLocationDensity_UniversityArea
+          setup-command: ''
+          command: mvn test -Pass1-doc -Dtest=dst.ass1.doc.tests.Ass1_4_3_01Test#testCalculateLocationDensity_UniversityArea
+          timeout: 1
+          max-score: 20
+
+      - name: Test testCalculateLocationDensity_NoLocations
+        id: testCalculateLocationDensity_NoLocations
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testCalculateLocationDensity_NoLocations
+          setup-command: ''
+          command: mvn test -Pass1-doc -Dtest=dst.ass1.doc.tests.Ass1_4_3_01Test#testCalculateLocationDensity_NoLocations
+          timeout: 1
+          max-score: 5
+
+      - name: Test insertsRider
+        id: insertsRider
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: insertsRider
+          setup-command: ''
+          command: mvn test -Pass1-jooq -Dtest=dst.ass1.jooq.Ass1_6_1Test#insertsRider
+          timeout: 1
+          max-score: 15
+
+      - name: Test deletesRider
+        id: deletesRider
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: deletesRider
+          setup-command: ''
+          command: mvn test -Pass1-jooq -Dtest=dst.ass1.jooq.Ass1_6_1Test#deletesRider
+          timeout: 1
+          max-score: 15
+
+      - name: Test onlyDeletesSpecifiedRider
+        id: onlyDeletesSpecifiedRider
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: onlyDeletesSpecifiedRider
+          setup-command: ''
+          command: mvn test -Pass1-jooq -Dtest=dst.ass1.jooq.Ass1_6_1Test#onlyDeletesSpecifiedRider
+          timeout: 1
+          max-score: 10
+
+      - name: Test deletesPreferencesAfterRiderWasDeleted
+        id: deletesPreferencesAfterRiderWasDeleted
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: deletesPreferencesAfterRiderWasDeleted
+          setup-command: ''
+          command: mvn test -Pass1-jooq -Dtest=dst.ass1.jooq.Ass1_6_1Test#deletesPreferencesAfterRiderWasDeleted
+          timeout: 1
+          max-score: 15
+
+      - name: Test updatesPreferences
+        id: updatesPreferences
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: updatesPreferences
+          setup-command: ''
+          command: mvn test -Pass1-jooq -Dtest=dst.ass1.jooq.Ass1_6_1Test#updatesPreferences
+          timeout: 1
+          max-score: 20
+
+      - name: Test testGetMostPopularVehicleClassPerArea_Success
+        id: testGetMostPopularVehicleClassPerArea_Success
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testGetMostPopularVehicleClassPerArea_Success
+          setup-command: ''
+          command: mvn test -Pass1-jooq -Dtest=dst.ass1.jooq.Ass1_6_1Test#testGetMostPopularVehicleClassPerArea_Success
+          timeout: 1
+          max-score: 15
+
+      - name: Test testGetMostPopularVehicleClassPerArea_NoPreferences
+        id: testGetMostPopularVehicleClassPerArea_NoPreferences
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testGetMostPopularVehicleClassPerArea_NoPreferences
+          setup-command: ''
+          command: mvn test -Pass1-jooq -Dtest=dst.ass1.jooq.Ass1_6_1Test#testGetMostPopularVehicleClassPerArea_NoPreferences
+          timeout: 1
+          max-score: 10
+
+      - name: Test testGetMostPopularVehicleClassPerArea_SinglePreference
+        id: testGetMostPopularVehicleClassPerArea_SinglePreference
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testGetMostPopularVehicleClassPerArea_SinglePreference
+          setup-command: ''
+          command: mvn test -Pass1-jooq -Dtest=dst.ass1.jooq.Ass1_6_1Test#testGetMostPopularVehicleClassPerArea_SinglePreference
+          timeout: 1
+          max-score: 10
+
+      - name: Test getAndSetSessionVariable_behavesCorrectly
+        id: getAndSetSessionVariable_behavesCorrectly
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: getAndSetSessionVariable_behavesCorrectly
+          setup-command: ''
+          command: mvn test -Pass1-kv -Dtest=dst.ass1.kv.tests.Ass1_5_1Test#getAndSetSessionVariable_behavesCorrectly
+          timeout: 1
+          max-score: 10
+
+      - name: Test setSessionVariable_forNonExistingSession_throwsSessionNotFoundException
+        id: setSessionVariable_forNonExistingSession_throwsSessionNotFoundException
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: setSessionVariable_forNonExistingSession_throwsSessionNotFoundException
+          setup-command: ''
+          command: mvn test -Pass1-kv -Dtest=dst.ass1.kv.tests.Ass1_5_1Test#setSessionVariable_forNonExistingSession_throwsSessionNotFoundException
+          timeout: 1
+          max-score: 3
+
+      - name: Test getSessionVariable_forNonExistingSession_throwsSessionNotFoundException
+        id: getSessionVariable_forNonExistingSession_throwsSessionNotFoundException
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: getSessionVariable_forNonExistingSession_throwsSessionNotFoundException
+          setup-command: ''
+          command: mvn test -Pass1-kv -Dtest=dst.ass1.kv.tests.Ass1_5_1Test#getSessionVariable_forNonExistingSession_throwsSessionNotFoundException
+          timeout: 1
+          max-score: 3
+
+      - name: Test getSessionVariable_onNonExistingVariable_returnsNull
+        id: getSessionVariable_onNonExistingVariable_returnsNull
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: getSessionVariable_onNonExistingVariable_returnsNull
+          setup-command: ''
+          command: mvn test -Pass1-kv -Dtest=dst.ass1.kv.tests.Ass1_5_1Test#getSessionVariable_onNonExistingVariable_returnsNull
+          timeout: 1
+          max-score: 4
+
+      - name: Test createSession_createsSessionId
+        id: createSession_createsSessionId
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: createSession_createsSessionId
+          setup-command: ''
+          command: mvn test -Pass1-kv -Dtest=dst.ass1.kv.tests.Ass1_5_1Test#createSession_createsSessionId
+          timeout: 1
+          max-score: 5
+
+      - name: Test getUserId_returnsCorrectUserID
+        id: getUserId_returnsCorrectUserID
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: getUserId_returnsCorrectUserID
+          setup-command: ''
+          command: mvn test -Pass1-kv -Dtest=dst.ass1.kv.tests.Ass1_5_1Test#getUserId_returnsCorrectUserID
+          timeout: 1
+          max-score: 10
+
+      - name: Test getUserId_forNonExistingSession_throwsException
+        id: getUserId_forNonExistingSession_throwsException
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: getUserId_forNonExistingSession_throwsException
+          setup-command: ''
+          command: mvn test -Pass1-kv -Dtest=dst.ass1.kv.tests.Ass1_5_1Test#getUserId_forNonExistingSession_throwsException
+          timeout: 1
+          max-score: 5
+
+      - name: Test getTimeToLive_afterExpiry_throwsSessionNotFoundException
+        id: getTimeToLive_afterExpiry_throwsSessionNotFoundException
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: getTimeToLive_afterExpiry_throwsSessionNotFoundException
+          setup-command: ''
+          command: mvn test -Pass1-kv -Dtest=dst.ass1.kv.tests.Ass1_5_1Test#getTimeToLive_afterExpiry_throwsSessionNotFoundException
+          timeout: 1
+          max-score: 5
+
+      - name: Test getTimeToLive_returnsCorrectValue
+        id: getTimeToLive_returnsCorrectValue
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: getTimeToLive_returnsCorrectValue
+          setup-command: ''
+          command: mvn test -Pass1-kv -Dtest=dst.ass1.kv.tests.Ass1_5_1Test#getTimeToLive_returnsCorrectValue
+          timeout: 1
+          max-score: 5
+
+      - name: Test getTimeToLive_forNonExistingSession_throwsSessionNotFoundException
+        id: getTimeToLive_forNonExistingSession_throwsSessionNotFoundException
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: getTimeToLive_forNonExistingSession_throwsSessionNotFoundException
+          setup-command: ''
+          command: mvn test -Pass1-kv -Dtest=dst.ass1.kv.tests.Ass1_5_1Test#getTimeToLive_forNonExistingSession_throwsSessionNotFoundException
+          timeout: 1
+          max-score: 5
+
+      - name: Test requireSession_concurrentAccess_behavesCorrectly
+        id: requireSession_concurrentAccess_behavesCorrectly
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: requireSession_concurrentAccess_behavesCorrectly
+          setup-command: ''
+          command: mvn test -Pass1-kv -Dtest=dst.ass1.kv.tests.Ass1_5_2_ConcurrencyTest#requireSession_concurrentAccess_behavesCorrectly
+          timeout: 1
+          max-score: 20
+
+      - name: Test testRequireSessionForExistingSession_existingIdReturned
+        id: testRequireSessionForExistingSession_existingIdReturned
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testRequireSessionForExistingSession_existingIdReturned
+          setup-command: ''
+          command: mvn test -Pass1-kv -Dtest=dst.ass1.kv.tests.Ass1_5_2Test#testRequireSessionForExistingSession_existingIdReturned
+          timeout: 1
+          max-score: 15
+
+      - name: Test testRequireSessionForNonExistingSession_newSessionCreated
+        id: testRequireSessionForNonExistingSession_newSessionCreated
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: testRequireSessionForNonExistingSession_newSessionCreated
+          setup-command: ''
+          command: mvn test -Pass1-kv -Dtest=dst.ass1.kv.tests.Ass1_5_2Test#testRequireSessionForNonExistingSession_newSessionCreated
+          timeout: 1
+          max-score: 5
+
+      - name: Autograding Reporter
+        uses: classroom-resources/autograding-grading-reporter@v1
+        env:
+          TEST01_MODELFACTORYRETURNSTHINGS_RESULTS: ${{steps.test01_modelFactoryReturnsThings.outputs.result}}
+          TEST02_DAOFACTORYRETURNSTHINGS_RESULTS: ${{steps.test02_daoFactoryReturnsThings.outputs.result}}
+          TEST03_ENTITYTYPESMANAGEDCORRECTLY_RESULTS: ${{steps.test03_entityTypesManagedCorrectly.outputs.result}}
+          TEST04_CANINSERTTESTFIXTURE_RESULTS: ${{steps.test04_canInsertTestFixture.outputs.result}}
+          TESTBASICTABLESJDBC_RESULTS: ${{steps.testBasicTablesJdbc.outputs.result}}
+          TESTRELATION01JDBC_RESULTS: ${{steps.testRelation01Jdbc.outputs.result}}
+          TESTRELATION02JDBC_RESULTS: ${{steps.testRelation02Jdbc.outputs.result}}
+          TESTRELATION03JDBC_RESULTS: ${{steps.testRelation03Jdbc.outputs.result}}
+          TESTRELATION04JDBC_RESULTS: ${{steps.testRelation04Jdbc.outputs.result}}
+          TESTRELATION05JDBC_RESULTS: ${{steps.testRelation05Jdbc.outputs.result}}
+          TESTRELATION06JDBC_RESULTS: ${{steps.testRelation06Jdbc.outputs.result}}
+          TESTRELATION07JDBC_RESULTS: ${{steps.testRelation07Jdbc.outputs.result}}
+          TESTRELATION08JDBC_RESULTS: ${{steps.testRelation08Jdbc.outputs.result}}
+          TESTRELATION09JDBC_RESULTS: ${{steps.testRelation09Jdbc.outputs.result}}
+          TESTRELATION10JDBC_RESULTS: ${{steps.testRelation10Jdbc.outputs.result}}
+          TESTRELATION11JDBC_RESULTS: ${{steps.testRelation11Jdbc.outputs.result}}
+          TESTRELATION12JDBC_RESULTS: ${{steps.testRelation12Jdbc.outputs.result}}
+          TESTRELATION13JDBC_RESULTS: ${{steps.testRelation13Jdbc.outputs.result}}
+          TESTCOLUMNTYPE01JDBC_RESULTS: ${{steps.testColumnType01Jdbc.outputs.result}}
+          TESTCONSTRAINTVEHICLELICENSEUNIQUE_RESULTS: ${{steps.testConstraintVehicleLicenseUnique.outputs.result}}
+          TESTCONSTRAINTJDBCVEHICLELICENSEUNIQUE_RESULTS: ${{steps.testConstraintJdbcVehicleLicenseUnique.outputs.result}}
+          TESTCONSTRAINTRIDERMAILNOTNULL_RESULTS: ${{steps.testConstraintRiderMailNotNull.outputs.result}}
+          TESTCONSTRAINTJDBCRIDERTELNOTNULL_RESULTS: ${{steps.testConstraintJdbcRiderTelNotNull.outputs.result}}
+          TESTCONSTRAINTDRIVERTELNOTNULL_RESULTS: ${{steps.testConstraintDriverTelNotNull.outputs.result}}
+          TESTCONSTRAINTJDBCDRIVERTELNOTNULL_RESULTS: ${{steps.testConstraintJdbcDriverTelNotNull.outputs.result}}
+          MONEYENTITYCANNOTBEPERSISTED_RESULTS: ${{steps.moneyEntityCannotBePersisted.outputs.result}}
+          MONEYISEMBEDDABLETYPE_RESULTS: ${{steps.moneyIsEmbeddableType.outputs.result}}
+          MONEYHASNOTABLE_RESULTS: ${{steps.moneyHasNoTable.outputs.result}}
+          TESTTRIPRIDERASSOCIATION_RESULTS: ${{steps.testTripRiderAssociation.outputs.result}}
+          TESTTRIPSTATUS_RESULTS: ${{steps.testTripStatus.outputs.result}}
+          TESTORGANIZATIONVEHICLEASSOCIATION_RESULTS: ${{steps.testOrganizationVehicleAssociation.outputs.result}}
+          TESTORGANIZATIONSELFASSOCIATION_RESULTS: ${{steps.testOrganizationSelfAssociation.outputs.result}}
+          TESTORGANIZATIONSELFASSOCIATIONJDBC_RESULTS: ${{steps.testOrganizationSelfAssociationJdbc.outputs.result}}
+          TESTRIDERACCOUNTNOBANKCODECONSTRAINT_RESULTS: ${{steps.testRiderAccountNoBankCodeConstraint.outputs.result}}
+          TESTRIDERACCOUNTNOBANKCODECONSTRAINTJDBC_RESULTS: ${{steps.testRiderAccountNoBankCodeConstraintJdbc.outputs.result}}
+          TESTUNIQUECONSTRAINT_RESULTS: ${{steps.testUniqueConstraint.outputs.result}}
+          TESTNOTNULLCONSTRAINT_RESULTS: ${{steps.testNotNullConstraint.outputs.result}}
+          TESTRIDEREMAILNOTNULLCONSTRAINTJDBC_RESULTS: ${{steps.testRiderEmailNotNullConstraintJdbc.outputs.result}}
+          TESTFINDACTIVEHIGHLYRATEDDRIVERS_VALIDRATING_RESULTS: ${{steps.testFindActiveHighlyRatedDrivers_ValidRating.outputs.result}}
+          TESTFINDACTIVEHIGHLYRATEDDRIVERS_INVALIDRATING_RESULTS: ${{steps.testFindActiveHighlyRatedDrivers_InvalidRating.outputs.result}}
+          TESTFINDACTIVEHIGHLYRATEDDRIVERS_NORESULTS_RESULTS: ${{steps.testFindActiveHighlyRatedDrivers_NoResults.outputs.result}}
+          TESTFINDCOMPLETEDTRIPSWITHMINSTOPS_SUCCESS_RESULTS: ${{steps.testFindCompletedTripsWithMinStops_Success.outputs.result}}
+          TESTFINDCOMPLETEDTRIPSWITHMINSTOPS_NORESULTS_RESULTS: ${{steps.testFindCompletedTripsWithMinStops_NoResults.outputs.result}}
+          TESTFINDCOMPLETEDTRIPSWITHMINSTOPS_INVALIDINPUT_RESULTS: ${{steps.testFindCompletedTripsWithMinStops_InvalidInput.outputs.result}}
+          TESTFINDORGANIZATIONSBYVEHICLETYPEANDDRIVERRATING_SUCCESS_RESULTS: ${{steps.testFindOrganizationsByVehicleTypeAndDriverRating_Success.outputs.result}}
+          TESTFINDORGANIZATIONSBYVEHICLETYPEANDDRIVERRATING_NORESULTS_RESULTS: ${{steps.testFindOrganizationsByVehicleTypeAndDriverRating_NoResults.outputs.result}}
+          TESTFINDORGANIZATIONSBYVEHICLETYPEANDDRIVERRATING_INVALIDRATING_RESULTS: ${{steps.testFindOrganizationsByVehicleTypeAndDriverRating_InvalidRating.outputs.result}}
+          TESTFINDTOPPERFORMINGDRIVERS_SUCCESS_RESULTS: ${{steps.testFindTopPerformingDrivers_Success.outputs.result}}
+          TESTFINDTOPPERFORMINGDRIVERS_NORESULTS_RESULTS: ${{steps.testFindTopPerformingDrivers_NoResults.outputs.result}}
+          TESTFINDTOPPERFORMINGDRIVERS_INVALIDDATERANGE_RESULTS: ${{steps.testFindTopPerformingDrivers_InvalidDateRange.outputs.result}}
+          TESTFINDTRIPSWITHCRITERIA_ALLPARAMETERS_RESULTS: ${{steps.testFindTripsWithCriteria_AllParameters.outputs.result}}
+          TESTFINDTRIPSWITHCRITERIA_ONLYFARERANGE_RESULTS: ${{steps.testFindTripsWithCriteria_OnlyFareRange.outputs.result}}
+          TESTFINDTRIPSWITHCRITERIA_ONLYMINSTOPS_RESULTS: ${{steps.testFindTripsWithCriteria_OnlyMinStops.outputs.result}}
+          TESTFINDTRIPSWITHCRITERIA_NORESULTS_RESULTS: ${{steps.testFindTripsWithCriteria_NoResults.outputs.result}}
+          CHECKINDEXAPPLIED_RESULTS: ${{steps.checkIndexApplied.outputs.result}}
+          CHECKGEOINDEXAPPLIED_RESULTS: ${{steps.checkGeoIndexApplied.outputs.result}}
+          INSERT_INSERTSDOCUMENTSCORRECTLY_RESULTS: ${{steps.insert_insertsDocumentsCorrectly.outputs.result}}
+          FINDBYLOCATIONTYPE_RETURNSCORRECTDOCUMENTSFORTYPEPLACE_RESULTS: ${{steps.findByLocationType_returnsCorrectDocumentsForTypePlace.outputs.result}}
+          FINDBYLOCATIONTYPE_RETURNSCORRECTDOCUMENTSFORTYPEFOOD_RESULTS: ${{steps.findByLocationType_returnsCorrectDocumentsForTypeFood.outputs.result}}
+          TESTFINDOPENRESTAURANTSINRADIUS_SUCCESS_RESULTS: ${{steps.testFindOpenRestaurantsInRadius_Success.outputs.result}}
+          TESTFINDOPENRESTAURANTSINRADIUS_CLOSEDHOUR_RESULTS: ${{steps.testFindOpenRestaurantsInRadius_ClosedHour.outputs.result}}
+          TESTFINDOPENRESTAURANTSINRADIUS_INVALIDHOUR_RESULTS: ${{steps.testFindOpenRestaurantsInRadius_InvalidHour.outputs.result}}
+          TESTCALCULATELOCATIONDENSITY_TUWIENAREA_RESULTS: ${{steps.testCalculateLocationDensity_TUWienArea.outputs.result}}
+          TESTCALCULATELOCATIONDENSITY_UNIVERSITYAREA_RESULTS: ${{steps.testCalculateLocationDensity_UniversityArea.outputs.result}}
+          TESTCALCULATELOCATIONDENSITY_NOLOCATIONS_RESULTS: ${{steps.testCalculateLocationDensity_NoLocations.outputs.result}}
+          INSERTSRIDER_RESULTS: ${{steps.insertsRider.outputs.result}}
+          DELETESRIDER_RESULTS: ${{steps.deletesRider.outputs.result}}
+          ONLYDELETESSPECIFIEDRIDER_RESULTS: ${{steps.onlyDeletesSpecifiedRider.outputs.result}}
+          DELETESPREFERENCESAFTERRIDERWASDELETED_RESULTS: ${{steps.deletesPreferencesAfterRiderWasDeleted.outputs.result}}
+          UPDATESPREFERENCES_RESULTS: ${{steps.updatesPreferences.outputs.result}}
+          TESTGETMOSTPOPULARVEHICLECLASSPERAREA_SUCCESS_RESULTS: ${{steps.testGetMostPopularVehicleClassPerArea_Success.outputs.result}}
+          TESTGETMOSTPOPULARVEHICLECLASSPERAREA_NOPREFERENCES_RESULTS: ${{steps.testGetMostPopularVehicleClassPerArea_NoPreferences.outputs.result}}
+          TESTGETMOSTPOPULARVEHICLECLASSPERAREA_SINGLEPREFERENCE_RESULTS: ${{steps.testGetMostPopularVehicleClassPerArea_SinglePreference.outputs.result}}
+          GETANDSETSESSIONVARIABLE_BEHAVESCORRECTLY_RESULTS: ${{steps.getAndSetSessionVariable_behavesCorrectly.outputs.result}}
+          SETSESSIONVARIABLE_FORNONEXISTINGSESSION_THROWSSESSIONNOTFOUNDEXCEPTION_RESULTS: ${{steps.setSessionVariable_forNonExistingSession_throwsSessionNotFoundException.outputs.result}}
+          GETSESSIONVARIABLE_FORNONEXISTINGSESSION_THROWSSESSIONNOTFOUNDEXCEPTION_RESULTS: ${{steps.getSessionVariable_forNonExistingSession_throwsSessionNotFoundException.outputs.result}}
+          GETSESSIONVARIABLE_ONNONEXISTINGVARIABLE_RETURNSNULL_RESULTS: ${{steps.getSessionVariable_onNonExistingVariable_returnsNull.outputs.result}}
+          CREATESESSION_CREATESSESSIONID_RESULTS: ${{steps.createSession_createsSessionId.outputs.result}}
+          GETUSERID_RETURNSCORRECTUSERID_RESULTS: ${{steps.getUserId_returnsCorrectUserID.outputs.result}}
+          GETUSERID_FORNONEXISTINGSESSION_THROWSEXCEPTION_RESULTS: ${{steps.getUserId_forNonExistingSession_throwsException.outputs.result}}
+          GETTIMETOLIVE_AFTEREXPIRY_THROWSSESSIONNOTFOUNDEXCEPTION_RESULTS: ${{steps.getTimeToLive_afterExpiry_throwsSessionNotFoundException.outputs.result}}
+          GETTIMETOLIVE_RETURNSCORRECTVALUE_RESULTS: ${{steps.getTimeToLive_returnsCorrectValue.outputs.result}}
+          GETTIMETOLIVE_FORNONEXISTINGSESSION_THROWSSESSIONNOTFOUNDEXCEPTION_RESULTS: ${{steps.getTimeToLive_forNonExistingSession_throwsSessionNotFoundException.outputs.result}}
+          REQUIRESESSION_CONCURRENTACCESS_BEHAVESCORRECTLY_RESULTS: ${{steps.requireSession_concurrentAccess_behavesCorrectly.outputs.result}}
+          TESTREQUIRESESSIONFOREXISTINGSESSION_EXISTINGIDRETURNED_RESULTS: ${{steps.testRequireSessionForExistingSession_existingIdReturned.outputs.result}}
+          TESTREQUIRESESSIONFORNONEXISTINGSESSION_NEWSESSIONCREATED_RESULTS: ${{steps.testRequireSessionForNonExistingSession_newSessionCreated.outputs.result}}
+        with:
+          runners: test01_modelFactoryReturnsThings,test02_daoFactoryReturnsThings,test03_entityTypesManagedCorrectly,test04_canInsertTestFixture,testBasicTablesJdbc,testRelation01Jdbc,testRelation02Jdbc,testRelation03Jdbc,testRelation04Jdbc,testRelation05Jdbc,testRelation06Jdbc,testRelation07Jdbc,testRelation08Jdbc,testRelation09Jdbc,testRelation10Jdbc,testRelation11Jdbc,testRelation12Jdbc,testRelation13Jdbc,testColumnType01Jdbc,testConstraintVehicleLicenseUnique,testConstraintJdbcVehicleLicenseUnique,testConstraintRiderMailNotNull,testConstraintJdbcRiderTelNotNull,testConstraintDriverTelNotNull,testConstraintJdbcDriverTelNotNull,moneyEntityCannotBePersisted,moneyIsEmbeddableType,moneyHasNoTable,testTripRiderAssociation,testTripStatus,testOrganizationVehicleAssociation,testOrganizationSelfAssociation,testOrganizationSelfAssociationJdbc,testRiderAccountNoBankCodeConstraint,testRiderAccountNoBankCodeConstraintJdbc,testUniqueConstraint,testNotNullConstraint,testRiderEmailNotNullConstraintJdbc,testFindActiveHighlyRatedDrivers_ValidRating,testFindActiveHighlyRatedDrivers_InvalidRating,testFindActiveHighlyRatedDrivers_NoResults,testFindCompletedTripsWithMinStops_Success,testFindCompletedTripsWithMinStops_NoResults,testFindCompletedTripsWithMinStops_InvalidInput,testFindOrganizationsByVehicleTypeAndDriverRating_Success,testFindOrganizationsByVehicleTypeAndDriverRating_NoResults,testFindOrganizationsByVehicleTypeAndDriverRating_InvalidRating,testFindTopPerformingDrivers_Success,testFindTopPerformingDrivers_NoResults,testFindTopPerformingDrivers_InvalidDateRange,testFindTripsWithCriteria_AllParameters,testFindTripsWithCriteria_OnlyFareRange,testFindTripsWithCriteria_OnlyMinStops,testFindTripsWithCriteria_NoResults,checkIndexApplied,checkGeoIndexApplied,insert_insertsDocumentsCorrectly,findByLocationType_returnsCorrectDocumentsForTypePlace,findByLocationType_returnsCorrectDocumentsForTypeFood,testFindOpenRestaurantsInRadius_Success,testFindOpenRestaurantsInRadius_ClosedHour,testFindOpenRestaurantsInRadius_InvalidHour,testCalculateLocationDensity_TUWienArea,testCalculateLocationDensity_UniversityArea,testCalculateLocationDensity_NoLocations,insertsRider,deletesRider,onlyDeletesSpecifiedRider,deletesPreferencesAfterRiderWasDeleted,updatesPreferences,testGetMostPopularVehicleClassPerArea_Success,testGetMostPopularVehicleClassPerArea_NoPreferences,testGetMostPopularVehicleClassPerArea_SinglePreference,getAndSetSessionVariable_behavesCorrectly,setSessionVariable_forNonExistingSession_throwsSessionNotFoundException,getSessionVariable_forNonExistingSession_throwsSessionNotFoundException,getSessionVariable_onNonExistingVariable_returnsNull,createSession_createsSessionId,getUserId_returnsCorrectUserID,getUserId_forNonExistingSession_throwsException,getTimeToLive_afterExpiry_throwsSessionNotFoundException,getTimeToLive_returnsCorrectValue,getTimeToLive_forNonExistingSession_throwsSessionNotFoundException,requireSession_concurrentAccess_behavesCorrectly,testRequireSessionForExistingSession_existingIdReturned,testRequireSessionForNonExistingSession_newSessionCreated
