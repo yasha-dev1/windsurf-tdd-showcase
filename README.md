@@ -20,3 +20,12 @@ These series of steps are done for DAO and Model Implementation
 ![alt text](image.png)
 
 ![alt text](image-1.png)
+
+**Crucial Note**: For optimal performance, we always should ask the AI Agent to run the automated tests for implementation. UML Diagrams, 
+help the Agent to understand the project structure and the relations between classes. 
+
+### Step 2: You need to check the code and review
+
+### Why this approach works for Windsurf?
+Windsurf is specifically evaluating their AI Agent on this task. Evaluation process of Windsurf AI Agent, goes through
+all public repos in Github. makes a huge corpus of Automated tests and their implementation. They provide the automated tests as an input to the AI Agent in Evaluation time and evaluate how good the model implements. 
