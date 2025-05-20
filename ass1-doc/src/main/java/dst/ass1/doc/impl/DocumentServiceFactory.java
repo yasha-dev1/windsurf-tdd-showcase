@@ -5,17 +5,19 @@ import dst.ass1.doc.IDocumentQuery;
 import dst.ass1.doc.IDocumentRepository;
 import dst.ass1.doc.IDocumentServiceFactory;
 
+/**
+ * Factory for creating document service components.
+ * Provides methods to create instances of DocumentQuery and DocumentRepository.
+ */
 public class DocumentServiceFactory implements IDocumentServiceFactory {
 
     @Override
     public IDocumentQuery createDocumentQuery(MongoDatabase db) {
-        // TODO
-        return null;
+        return new DocumentQuery(db);
     }
 
     @Override
     public IDocumentRepository createDocumentRepository() {
-        // TODO
-        return null;
+        return new DocumentRepository();
     }
 }
