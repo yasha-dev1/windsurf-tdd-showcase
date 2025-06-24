@@ -4,6 +4,56 @@
                  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_2.xsd"
                  version="2.2">
 
-    <!-- TODO -->
+    <entity class="dst.ass1.jpa.model.impl.Trip" name="Trip" access="FIELD">
+        <table name="Trip"/>
+        <attributes>
+            <id name="id">
+                <generated-value strategy="IDENTITY"/>
+            </id>
+            <basic name="created">
+                <column name="created" nullable="false"/>
+                <temporal>TIMESTAMP</temporal>
+            </basic>
+            <basic name="updated">
+                <column name="updated"/>
+                <temporal>TIMESTAMP</temporal>
+            </basic>
+            <basic name="state">
+                <column name="state" nullable="false"/>
+                <enumerated>STRING</enumerated>
+            </basic>
+            <basic name="paymentMethod">
+                <column name="paymentMethod"/>
+                <enumerated>STRING</enumerated>
+            </basic>
+            <many-to-one name="pickup" target-entity="dst.ass1.jpa.model.impl.Location" fetch="EAGER">
+                <join-column name="pickup_id" nullable="false"/>
+            </many-to-one>
+            <many-to-one name="destination" target-entity="dst.ass1.jpa.model.impl.Location" fetch="EAGER">
+                <join-column name="destination_id" nullable="false"/>
+            </many-to-one>
+            <many-to-many name="stops" target-entity="dst.ass1.jpa.model.impl.Location" fetch="LAZY">
+                <join-table name="trip_location">
+                    <join-column name="trip_id"/>
+                    <inverse-join-column name="stops_id"/>
+                </join-table>
+            </many-to-many>
+            <one-to-one name="tripInfo" target-entity="dst.ass1.jpa.model.impl.TripInfo" fetch="LAZY">
+                <join-column name="tripInfo_id"/>
+                <cascade>
+                    <cascade-all/>
+                </cascade>
+            </one-to-one>
+            <one-to-one name="match" target-entity="dst.ass1.jpa.model.impl.Match" fetch="LAZY">
+                <join-column name="match_id"/>
+                <cascade>
+                    <cascade-all/>
+                </cascade>
+            </one-to-one>
+            <many-to-one name="rider" target-entity="dst.ass1.jpa.model.impl.Rider" fetch="EAGER">
+                <join-column name="rider_id" nullable="false"/>
+            </many-to-one>
+        </attributes>
+    </entity>
 
 </entity-mappings>
